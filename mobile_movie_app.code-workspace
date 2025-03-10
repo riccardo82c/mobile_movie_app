@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+  ],
+  "settings": {
+    "workbench.colorCustomizations": {},
+    "workbench.colorTheme": "JetBrains Dark (New UI)",
+    "editor.fontFamily": "'Droid Sans Mono', 'monospace', monospace",
+    "editor.fontLigatures": false
+  }
+}
