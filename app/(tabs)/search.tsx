@@ -1,18 +1,18 @@
-import { useState, useEffect } from "react";
-import { View, Text, ActivityIndicator, FlatList, Image } from "react-native";
+import { useState, useEffect } from "react"
+import { View, Text, ActivityIndicator, FlatList, Image } from "react-native"
 
-import { images } from "@/constants/images";
-import { icons } from "@/constants/icons";
+import { images } from "@/constants/images"
+import { icons } from "@/constants/icons"
 
-import useFetch from "@/services/useFetch";
-import { fetchMovies } from "@/services/api";
-// import { updateSearchCount } from "@/services/appwrite";
+import useFetch from "@/services/useFetch"
+import { fetchMovies } from "@/services/api"
+import { updateSearchCount } from "@/services/appwrite"
 
-import SearchBar from "@/components/SearchBar";
-import MovieDisplayCard from "@/components/MovieCard";
+import SearchBar from "@/components/SearchBar"
+import MovieDisplayCard from "@/components/MovieCard"
 
 const Search = () => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("")
 
   const {
     data: movies = [],
@@ -20,35 +20,36 @@ const Search = () => {
     error,
     refetch: loadMovies,
     reset,
-  } = useFetch<Movie[]>(() => fetchMovies({ query: searchQuery }), false);
+  } = useFetch<Movie[]>(() => fetchMovies({ query: searchQuery }), false)
 
   const handleSearch = (text: string) => {
-    setSearchQuery(text);
-  };
+    setSearchQuery(text)
+  }
 
   // Debounced search effect
   useEffect(() => {
     const timeoutId = setTimeout(async () => {
       if (searchQuery.trim()) {
-        await loadMovies();
+        const result = await loadMovies()
 
-        // Call updateSearchCount only if there are results
-        // if (movies?.length! > 0 && movies?.[0]) {
-        //   await updateSearchCount(searchQuery, movies[0]);
-        // }
+        // Usa il risultato direttamente invece di dipendere dalla variabile di stato
+        if (result && result.length > 0) {
+          await updateSearchCount(searchQuery, result[0])
+        }
       } else {
-        reset();
+        reset()
       }
-    }, 500);
+    }, 500)
 
-    return () => clearTimeout(timeoutId);
-  }, [searchQuery]);
+    return () => clearTimeout(timeoutId)
+  }, [searchQuery])
 
   return (
     <View className="flex-1 bg-primary">
       <Image
         source={images.bg}
         className="absolute w-full z-0"
+        resizeMode="cover"
       />
 
       <FlatList
@@ -68,8 +69,8 @@ const Search = () => {
           paddingBottom: 10
         }}
         ListHeaderComponent={
-          <>
-            <Image source={icons.logo} className="w-12 h-10 mt-10 mb-5 mx-auto" />
+          <View>
+            <Image source={icons.logo} className="w-12 h-10 mt-8 mb-7 mx-auto" />
             <SearchBar
               placeholder="Search for a movie"
               value={searchQuery}
@@ -94,12 +95,12 @@ const Search = () => {
               !error &&
               searchQuery.trim() &&
               movies?.length! > 0 && (
-                <Text className="text-lg text-white font-bold mt-5 mb-3">
+                <Text className="text-lg text-white font-bold mt-10 mb-3">
                   Search Results for{" "}
                   <Text className="text-accent">{searchQuery}</Text>
                 </Text>
               )}
-          </>
+          </View>
         }
         ListEmptyComponent={
           !loading && !error ? (
@@ -114,7 +115,7 @@ const Search = () => {
         }
       />
     </View>
-  );
-};
+  )
+}
 
-export default Search;
+export default Search
