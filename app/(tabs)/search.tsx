@@ -30,12 +30,7 @@ const Search = () => {
   useEffect(() => {
     const timeoutId = setTimeout(async () => {
       if (searchQuery.trim()) {
-        const result = await loadMovies()
-
-        // Usa il risultato direttamente invece di dipendere dalla variabile di stato
-        if (result && result.length > 0) {
-          await updateSearchCount(searchQuery, result[0])
-        }
+        await loadMovies()
       } else {
         reset()
       }
@@ -43,6 +38,13 @@ const Search = () => {
 
     return () => clearTimeout(timeoutId)
   }, [searchQuery])
+
+  useEffect(() => {
+    // Usa il risultato direttamente invece di dipendere dalla variabile di stato
+    if (movies && movies.length > 0) {
+      updateSearchCount(searchQuery, movies[0])
+    }
+  }, [movies])
 
   return (
     <View className="flex-1 bg-primary">

@@ -5,34 +5,34 @@ import {
   ScrollView,
   Image,
   FlatList,
-} from "react-native";
-import { useRouter } from "expo-router";
+} from "react-native"
+import { useRouter } from "expo-router"
 
-import useFetch from "@/services/useFetch";
-import { fetchMovies } from "@/services/api";
-import { getTrendingMovies } from "@/services/appwrite";
+import useFetch from "@/services/useFetch"
+import { fetchMovies } from "@/services/api"
+import { getTrendingMovies } from "@/services/appwrite"
 
-import { icons } from "@/constants/icons";
-import { images } from "@/constants/images";
+import { icons } from "@/constants/icons"
+import { images } from "@/constants/images"
 
-import SearchBar from "@/components/SearchBar";
-import MovieCard from "@/components/MovieCard";
-import TrendingCard from "@/components/TrendingCard";
+import SearchBar from "@/components/SearchBar"
+import MovieCard from "@/components/MovieCard"
+import TrendingCard from "@/components/TrendingCard"
 
 const Index = () => {
-  const router = useRouter();
+  const router = useRouter()
 
   const {
     data: trendingMovies,
     loading: trendingLoading,
     error: trendingError,
-  } = useFetch(getTrendingMovies);
+  } = useFetch(getTrendingMovies)
 
   const {
     data: movies,
     loading: moviesLoading,
     error: moviesError,
-  } = useFetch(() => fetchMovies({ query: "" }));
+  } = useFetch(() => fetchMovies({ query: "" }))
 
   return (
     <View className="flex-1 bg-primary">
@@ -61,7 +61,7 @@ const Index = () => {
           <View className="flex-1 mt-2">
             <SearchBar
               onPress={() => {
-                router.push("/search");
+                router.push("/search")
               }}
               placeholder="Search for a movie"
             />
@@ -112,7 +112,7 @@ const Index = () => {
         )}
       </ScrollView>
     </View>
-  );
-};
+  )
+}
 
-export default Index;
+export default Index

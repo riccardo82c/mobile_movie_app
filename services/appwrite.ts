@@ -11,13 +11,12 @@ const client = new Client()
 const database = new Databases(client)
 
 export const updateSearchCount = async (query: string, movie: Movie) => {
-
   console.log('updating search count', query)
 
   try {
-
+    // Cambiato: ora cerchiamo per movie_id invece che per searchTerm
     const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
-      Query.equal('searchTerm', query)
+      Query.equal('movie_id', movie.id)
     ])
 
     if (result.documents.length > 0) {
@@ -31,6 +30,8 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
         existingMovie.$id,
         {
           count: existingMovie.count + 1,
+          // Opzionale: aggiorna anche il termine di ricerca più recente
+          searchTerm: query
         }
       )
     } else {
@@ -53,9 +54,7 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
   } catch (error) {
     console.log(error)
     throw error
-
   }
-
 }
 
 export const getTrendingMovies = async (): Promise<TrendingMovie[]> => {
@@ -65,9 +64,9 @@ export const getTrendingMovies = async (): Promise<TrendingMovie[]> => {
     const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
       Query.limit(5),
       Query.orderDesc('count')
-    ] )
+    ])
 
-     return result.documents as unknown as TrendingMovie[]
+    return result.documents as unknown as TrendingMovie[]
 
   } catch (error) {
     console.log(error)
