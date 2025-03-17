@@ -77,7 +77,7 @@ const Index = () => {
                   className="mb-4 mt-3"
                   data={trendingMovies}
                   contentContainerStyle={{
-                    gap: 26,
+                    gap: 12,
                   }}
                   renderItem={({ item, index }) => (
                     <TrendingCard movie={item} index={index} />
